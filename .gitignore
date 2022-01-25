@@ -1,0 +1,9 @@
+# 忽略log目录
+log/
+# 忽略target目录
+target/
+# 忽略.idea目录
+.idea/
+/idea/
+# 忽略所有.iml文件
+*.iml

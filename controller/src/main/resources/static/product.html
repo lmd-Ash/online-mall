@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/index.css" rel="stylesheet"/>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-button type="primary" @click="add">新增</el-button>
+    <template>
+        <el-table
+                :data="productList"
+                border
+                style="width: 100%">
+            <el-table-column
+                    fixed
+                    prop="pname"
+                    label="商品名称"
+            >
+            </el-table-column>
+            <el-table-column
+                    fixed
+                    prop="price"
+                    label="商品价格"
+            >
+            </el-table-column>
+            <el-table-column
+                    fixed
+                    prop="brand.bname"
+                    label="商品类别"
+            >
+            </el-table-column>
+            <el-table-column
+                    fixed
+                    prop="prodate"
+                    label="上架时间"
+            >
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+            >
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
+                    <el-button type="text" size="small" @click="delete(scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+
+    <!--模态框-->
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%">
+        <!--:model="empForm":绑定表单数据  :rules="rules"：验证规则-->
+        <el-form :model="productForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="商品编号" prop="id">
+                <el-input v-model="productForm.id"></el-input>
+            </el-form-item>
+            <el-form-item label="商品名称" prop="pname">
+                <el-input v-model="productForm.pname"></el-input>
+            </el-form-item>
+            <el-form-item label="商品价格" prop="price">
+                <el-input v-model="productForm.price"></el-input>
+            </el-form-item>
+
+
+            <el-form-item label="商品类别" prop="brand.bid">
+                <el-select v-model="productForm.brand" filterable  placeholder="请选择类别" value-key="bid">
+                    <el-option
+                            v-for="item in brandList"
+                            :key="item.bid"
+                            :label="item.bname"
+                            :value="item">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+
+
+            <el-form-item label="上架时间" required>
+                <el-form-item prop="prodate">
+                    <el-date-picker type="date" placeholder="选择日期" v-model="productForm.prodate" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+            </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        </span>
+    </el-dialog>
+</div>
+</body>
+<script>
+    //验证规则  名字要和prop属性的值对应
+    var rules={
+        pname: [
+            { required: true, message: '请输入名称', trigger: 'blur' },
+            { min: 3, max: 10, message: '长度在 3 到 10个字符', trigger: 'blur' }
+        ],
+        price: [
+            { required: true, message: '价格', trigger: 'blur' },
+            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+        ],
+        brand: [
+            { required: true, message: '请选择类别', trigger: 'change' }
+        ],
+        prodate: [
+            { type: 'string', required: true, message: '请选择日期', trigger: 'change' }
+        ]
+    };
+    var vm=new Vue({
+        el:"#app",
+        data:{
+            brandList:[],//获取的部门集合用来绑定下拉框
+            productList:[],
+            dialogVisible:false,  //用来控制模态框是否显示
+            productForm:{}, //表单数据
+            rules:rules //验证规则
+        },
+        mounted:function(){
+            //调用函数初始化
+            this.getProduct();
+            this.getBrand();
+        },
+        methods: {
+            getProduct:function() {
+                axios.get("/product/list").then(response=>{
+                    console.info(response.data);
+                    this.productList = response.data
+                })
+            },
+            getBrand:function(){
+                axios.get("/brand/query").then(response=>{
+                    console.info(response.data);
+                    this.brandList = response.data;
+                })
+            },
+            add:function () {
+                this.productForm={};
+                this.dialogVisible=true;
+
+            },
+            update:function (rowData) {
+                this.productForm=rowData;
+                this.dialogVisible=true;
+
+                // console.info(rowData);
+
+            },
+            submitForm:function (formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        axios.post("/product/add",this.productForm).then(response=>{
+                            this.dialogVisible=false;
+                            if (response.data>=1){
+                                this.$message({
+                                    message: '添加成功',
+                                    type:  'success'
+                                })
+                            } else{
+                                this.$message({
+                                    message: '添加失败',
+                                    type:  'error'
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    })
+</script>
+</html>
