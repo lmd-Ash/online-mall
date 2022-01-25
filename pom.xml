@@ -147,6 +147,12 @@
                 <version>2.0</version>
             </dependency>
 
+            <!--     fastDFS       -->
+            <dependency>
+                <groupId>com.github.tobato</groupId>
+                <artifactId>fastdfs-client</artifactId>
+                <version>1.26.7</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -3,7 +3,7 @@ package com.onlinemall.config;
 import com.alibaba.fastjson.JSONObject;
 import com.onlinemall.common.Msg;
 import com.onlinemall.common.Result;
-import com.onlinemall.model.User;
+import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
