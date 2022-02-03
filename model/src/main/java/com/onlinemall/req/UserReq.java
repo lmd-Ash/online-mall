@@ -3,10 +3,12 @@ package com.onlinemall.req;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.onlinemall.tkmybatis.Insert;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,35 +27,19 @@ public class UserReq extends BaseReq implements Serializable {
     /**
      * 用户名
      */
+    @NotBlank(message = "请填写用户名", groups = Insert.class)
     private String userName;
+
+    /**
+     * 用户名
+     */
+    @NotBlank(message = "请填写登录名", groups = Insert.class)
+    private String loginName;
 
     /**
      * 密码
      */
+    @NotBlank(message = "请填写密码", groups = Insert.class)
     private String password;
-
-    /**
-     * 旧密码
-     */
-    private String oldPassword;
-
-    /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * 创建时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime;
-
-    /**
-     * 是否可用：0：否，1：是
-     */
-    private Boolean isUsable;
-
-    private String token;
 
 }

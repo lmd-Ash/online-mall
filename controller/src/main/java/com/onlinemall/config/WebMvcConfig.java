@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor)
                 // 需要拦截的uri
-                .addPathPatterns("/**")
+                .addPathPatterns("/back/**", "/front/**")
                 // 需要跳过的uri
                 .excludePathPatterns("/user/login", "/user/register")
                 // 拦截器的执行顺序 设置高一点方便后期扩展
