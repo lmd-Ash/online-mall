@@ -4,31 +4,26 @@ import com.onlinemall.tkmybatis.BaseEntity;
 import java.util.Date;
 import javax.persistence.*;
 
-public class User extends BaseEntity {
+@Table(name = "product_type")
+public class ProductType extends BaseEntity {
     /**
-     * 员工id
+     * 商品分类id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
-     * 员工姓名
+     * 商品分类名称
      */
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "product_type_name")
+    private String productTypeName;
 
     /**
-     * 登录密码
+     * 创建时间
      */
-    private String password;
-
-    /**
-     * 登录账号
-     */
-    @Column(name = "login_name")
-    private String loginName;
-
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * 创建人id
@@ -36,6 +31,11 @@ public class User extends BaseEntity {
     @Column(name = "create_user_id")
     private Integer createUserId;
 
+    /**
+     * 修改时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * 修改人id
@@ -50,81 +50,63 @@ public class User extends BaseEntity {
     private Boolean isAvailable;
 
     /**
-     * 获取员工id
+     * 获取商品分类id
      *
-     * @return id - 员工id
+     * @return id - 商品分类id
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 设置员工id
+     * 设置商品分类id
      *
-     * @param id 员工id
+     * @param id 商品分类id
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * 获取员工姓名
+     * 获取商品分类名称
      *
-     * @return user_name - 员工姓名
+     * @return product_type_name - 商品分类名称
      */
-    public String getUserName() {
-        return userName;
+    public String getProductTypeName() {
+        return productTypeName;
     }
 
     /**
-     * 设置员工姓名
+     * 设置商品分类名称
      *
-     * @param userName 员工姓名
+     * @param productTypeName 商品分类名称
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
     }
 
     /**
-     * 获取登录密码
+     * 获取创建时间
      *
-     * @return password - 登录密码
+     * @return create_time - 创建时间
      */
-    public String getPassword() {
-        return password;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
-     * 设置登录密码
+     * 设置创建时间
      *
-     * @param password 登录密码
+     * @param createTime 创建时间
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
-     * 获取登录账号
+     * 获取创建人id
      *
-     * @return login_name - 登录账号
-     */
-    public String getLoginName() {
-        return loginName;
-    }
-
-    /**
-     * 设置登录账号
-     *
-     * @param loginName 登录账号
-     */
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    /**
-     * ��ȡ������id
-     *
-     * @return create_user_id - ������id
+     * @return create_user_id - 创建人id
      */
     public Integer getCreateUserId() {
         return createUserId;
@@ -140,9 +122,27 @@ public class User extends BaseEntity {
     }
 
     /**
-     * ��ȡ�޸���id
+     * 获取修改时间
      *
-     * @return update_user_id - �޸���id
+     * @return update_time - 修改时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置修改时间
+     *
+     * @param updateTime 修改时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取修改人id
+     *
+     * @return update_user_id - 修改人id
      */
     public Integer getUpdateUserId() {
         return updateUserId;

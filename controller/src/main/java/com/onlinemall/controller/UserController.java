@@ -5,11 +5,14 @@ import com.onlinemall.common.Result;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.UserReq;
 import com.onlinemall.service.UserService;
+import com.onlinemall.tkmybatis.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Objects;
 
@@ -42,7 +45,8 @@ public class UserController {
      * 员工注册
      */
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    public Result userRegister(@RequestBody UserReq userReq) {
+    @ResponseBody
+    public Result userRegister(@RequestBody @Validated(Insert.class) UserReq userReq) {
         User user = userService.findByLoginName(userReq.getLoginName());
         if (Objects.nonNull(user)) {
             return Result.build(Msg.FAIL, Msg.TEXT_LOGIN_NAME_EXIST);

@@ -1,8 +1,14 @@
 package com.onlinemall.common;
 
+import com.onlinemall.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,6 +26,44 @@ import java.util.Objects;
 @RestControllerAdvice
 @Slf4j
 public class MallControllerAdvice {
+
+    @ExceptionHandler(CustomException.class)
+    public Result handleException(CustomException e) {
+        log.error("\n{}", e.getMessage());
+        return Result.build(Msg.FAIL, e.getMessage());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result handleException(MissingServletRequestParameterException e) {
+        log.error("\n{}", e.getMessage());
+        return Result.build(Msg.FAIL, "参数丢失");
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public Result handleException(HttpMediaTypeNotSupportedException e) {
+        log.error("\n{}", e.getMessage());
+        return Result.build(Msg.FAIL, "不支持的数据格式");
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Result handleException(HttpMessageNotReadableException e) {
+        log.error("\n{}", e.getMessage());
+        return Result.build(Msg.FAIL, "参数格式或类型错误");
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handleException(MethodArgumentNotValidException e) {
+        log.error("\n{}", e.getMessage());
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        return Result.build(Msg.FAIL, message);
+    }
+
+    @ExceptionHandler(BindException.class)
+    public Result handleException(BindException e) {
+        log.error("\n{}", e.getMessage());
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        return Result.build(Msg.FAIL, message);
+    }
 
     /**
      * 全局异常处理

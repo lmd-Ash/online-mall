@@ -4,12 +4,15 @@ import com.onlinemall.common.BeanMapper;
 import com.onlinemall.mapper.UserMapper;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.UserReq;
+import com.onlinemall.resp.UserResp;
 import com.onlinemall.service.UserService;
+import com.onlinemall.utils.JwtUtil;
+import com.onlinemall.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 11923
@@ -22,7 +25,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer userRegister(UserReq userReq) {
         User user = BeanMapper.map(userReq, User.class);
-        return userMapper.insert(user);
+        String md5Password = MD5Util.stringMD5(userReq.getPassword());
+        assert user != null;
+        user.setPassword(md5Password);
+        return userMapper.register(user);
     }
 
     @Override
@@ -30,6 +36,29 @@ public class UserServiceImpl implements UserService {
         Example example = new Example(User.class);
         example.createCriteria().andEqualTo("isAvailable", true)
                 .andEqualTo("loginName", loginName);
+        return userMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public UserResp userLogin(UserReq userReq) {
+        User user = this.findByLoginName(userReq.getLoginName());
+        String md5Password = MD5Util.stringMD5(userReq.getPassword());
+        if (!Objects.equals(user.getPassword(), md5Password)) {
+            return null;
+        }
+        // 生成token
+        String token = JwtUtil.createToken(user.getId().toString());
+        UserResp userResp = BeanMapper.map(user, UserResp.class);
+        assert userResp != null;
+        userResp.setToken(token);
+        return userResp;
+    }
+
+    @Override
+    public User findById(Integer id) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("isAvailable", true)
+                .andEqualTo("id", id);
         return userMapper.selectOneByExample(example);
     }
 }

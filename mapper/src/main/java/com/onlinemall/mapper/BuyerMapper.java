@@ -1,19 +1,16 @@
 package com.onlinemall.mapper;
 
 import com.onlinemall.interfaces.BaseMapper;
-import com.onlinemall.mybatis_entity.User;
+import com.onlinemall.mybatis_entity.Buyer;
 import org.springframework.stereotype.Repository;
 
-/**
- * @author 11923
- */
 @Repository
-public interface UserMapper extends BaseMapper<User> {
+public interface BuyerMapper extends BaseMapper<Buyer> {
     /**
      * 用户注册
      *
-     * @param user
+     * @param buyer
      * @return
      */
-    int register(User user);
+    int register(Buyer buyer);
 }

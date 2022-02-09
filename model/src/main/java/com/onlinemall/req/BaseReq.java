@@ -39,4 +39,12 @@ public class BaseReq implements Serializable {
      * 排序条件
      */
     private String clause;
+
+    public void setAvailable(Boolean available) {
+        if (Objects.isNull(available)) {
+            this.isAvailable = true;
+        } else {
+            this.isAvailable = available;
+        }
+    }
 }

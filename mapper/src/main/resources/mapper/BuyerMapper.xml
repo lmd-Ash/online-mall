@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.onlinemall.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.onlinemall.mybatis_entity.User">
+<mapper namespace="com.onlinemall.mapper.BuyerMapper">
+  <resultMap id="BaseResultMap" type="com.onlinemall.mybatis_entity.Buyer">
     <!--
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="buyer_name" jdbcType="VARCHAR" property="buyerName" />
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
     <result column="update_user_id" jdbcType="INTEGER" property="updateUserId" />
     <result column="is_available" jdbcType="BIT" property="isAvailable" />
   </resultMap>
-  <insert id="register" parameterType="com.onlinemall.mybatis_entity.User">
-        insert into user (user_name,password,login_name) values (#{userName},#{password},#{loginName})
+  <insert id="register" parameterType="com.onlinemall.mybatis_entity.Buyer">
+    insert into buyer (user_name,password,login_name,phone) values (#{userName},#{password},#{loginName},#{phone})
   </insert>
 </mapper>

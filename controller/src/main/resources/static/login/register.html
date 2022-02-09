@@ -42,21 +42,57 @@
 
 <div class="container">
 
-    <form class="form-signin">
+    <!--    <form class="form-signin">-->
+    <div style="width: 50%; text-align: center" >
         <h2 class="form-signin-heading">欢迎注册网上商城</h2>
-        <label for="loginName" class="sr-only">请输入用户名</label>
-        <input type="text" id="loginName" class="form-control" placeholder="请输入用户名" required autofocus>
-        <label for="inputPassword" class="sr-only">请输入密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码" required>
-        <label for="phone" class="sr-only">请输入手机号</label>
-        <input type="password" id="phone" class="form-control" placeholder="请输入手机号" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
-    </form>
+        <label for="userName" class="sr-only">请输入用户名</label>
+        <input type="text" id="userName" class="form-control" placeholder="请输入用户名" required autofocus>
+        <label for="loginName" class="sr-only">请输入登录名</label>
+        <input type="text" id="loginName" class="form-control" placeholder="请输入登录名" required autofocus>
+        <label for="password" class="sr-only">请输入密码</label>
+        <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="register()">注册</button>
+    </div>
+    <!--    </form>-->
 
 </div> <!-- /container -->
 
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script>
+    function register() {
+        var data = {
+            userName: $("#userName").val(),
+            loginName: $("#loginName").val(),
+            password: $("#password").val()
+        };
+        data = JSON.stringify(data);
+        // data = JSON.parse(data);
+        console.log(data);
+        $.ajax({
+            url: '/user/register',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: data,
+            success: function (result) {
+                console.log(result);
+                // 请求成功后执行的代码
+                var newData = JSON.stringify(result);    //将json对象转换为字符串
+                newData = eval("(" + newData + ")");   //解析json
+                if (newData.code == 200) {
+                    alert("消息:" + newData.msg);
+                } else {
+                    alert("消息:" + newData.msg);
+                }
+            },
+            error: function () {
+                // 失败后执行的代码
+                alert("消息:000000");
+            }
+        });
+    }
+</script>
 </body>
 </html>
