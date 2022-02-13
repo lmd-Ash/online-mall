@@ -5,10 +5,12 @@ import com.onlinemall.mapper.UserMapper;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.UserReq;
 import com.onlinemall.resp.UserResp;
+import com.onlinemall.server.RedisService;
 import com.onlinemall.service.UserService;
 import com.onlinemall.utils.JwtUtil;
 import com.onlinemall.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -21,6 +23,13 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RedisService redisService;
+    /**
+     * 用户session过期时间
+     */
+    @Value("${token.timeout}")
+    private Integer tokenTimeOut;
 
     @Override
     public Integer userRegister(UserReq userReq) {
@@ -51,6 +60,8 @@ public class UserServiceImpl implements UserService {
         UserResp userResp = BeanMapper.map(user, UserResp.class);
         assert userResp != null;
         userResp.setToken(token);
+        // 存入redis
+        redisService.set("user:".concat(user.getId().toString()), user, Long.valueOf(tokenTimeOut));
         return userResp;
     }
 

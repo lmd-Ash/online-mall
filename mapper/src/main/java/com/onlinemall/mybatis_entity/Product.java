@@ -13,6 +13,12 @@ public class Product extends BaseEntity {
     private Integer id;
 
     /**
+     * 商品分类id
+     */
+    @Column(name = "product_type_id")
+    private Integer productTypeId;
+
+    /**
      * 商品名称
      */
     @Column(name = "product_name")
@@ -82,6 +88,24 @@ public class Product extends BaseEntity {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * 获取商品分类id
+     *
+     * @return product_type_id - 商品分类id
+     */
+    public Integer getProductTypeId() {
+        return productTypeId;
+    }
+
+    /**
+     * 设置商品分类id
+     *
+     * @param productTypeId 商品分类id
+     */
+    public void setProductTypeId(Integer productTypeId) {
+        this.productTypeId = productTypeId;
     }
 
     /**

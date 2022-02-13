@@ -22,7 +22,7 @@ public interface RedisService {
      * @param value   值
      * @param timeout 失效时间(秒)
      */
-    public void setExpire(String key, Object value, long timeout);
+    public void set(String key, Object value, long timeout);
 
     /**
      * 延长key失效时间

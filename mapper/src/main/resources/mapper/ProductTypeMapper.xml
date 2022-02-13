@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onlinemall.mapper.ProductTypeMapper">
-  <resultMap id="BaseResultMap" type="com.onlinemall.mybatis_entity.ProductType">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="product_type_name" jdbcType="VARCHAR" property="productTypeName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="update_user_id" jdbcType="INTEGER" property="updateUserId" />
-    <result column="is_available" jdbcType="BIT" property="isAvailable" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.onlinemall.mybatis_entity.ProductType">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="product_type_name" jdbcType="VARCHAR" property="productTypeName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user_id" jdbcType="INTEGER" property="createUserId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user_id" jdbcType="INTEGER" property="updateUserId"/>
+        <result column="is_available" jdbcType="BIT" property="isAvailable"/>
+    </resultMap>
+    <insert id="saveProductType" parameterType="com.onlinemall.mybatis_entity.ProductType">
+        insert into product_type (product_type_name, create_user_id)
+        values (#{productTypeName}, #{createUserId})
+    </insert>
+    <update id="updateProductType" parameterType="com.onlinemall.mybatis_entity.ProductType">
+        update product_type
+        set product_type_name = #{productTypeName},
+            update_user_id    = #{updateUserId}
+    </update>
 </mapper>

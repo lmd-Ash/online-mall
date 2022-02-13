@@ -2,6 +2,7 @@ package com.onlinemall.service;
 
 import com.onlinemall.mybatis_entity.Buyer;
 import com.onlinemall.req.BuyerReq;
+import com.onlinemall.resp.BuyerResp;
 
 public interface BuyerService {
     /**
@@ -19,4 +20,12 @@ public interface BuyerService {
      * @return
      */
     Buyer findByLoginName(String loginName);
+
+    /**
+     * 用户登录
+     *
+     * @param buyerReq
+     * @return
+     */
+    BuyerResp buyerLogin(BuyerReq buyerReq);
 }

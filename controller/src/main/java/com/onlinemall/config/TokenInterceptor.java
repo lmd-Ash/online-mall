@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.onlinemall.common.Msg;
 import com.onlinemall.common.Result;
 import com.onlinemall.mybatis_entity.User;
+import com.onlinemall.service.UserService;
 import com.onlinemall.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -31,8 +33,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      */
     @Value("${session.user.key}")
     private String userSession;
-//    @Autowired
-//    private UserMapper userMapper;
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -76,8 +78,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         }
         // 5、 从 token 中获取员工信息
         String userId = claim.getSubject();
-//        User user = userMapper.selectByPrimaryKey(Integer.valueOf(userId));
-        User user = new User();
+        User user = userService.findById(Integer.valueOf(userId));
         if (Objects.isNull(user)) {
             //重置response
             response.reset();

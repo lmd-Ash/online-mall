@@ -46,7 +46,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void setExpire(String key, Object value, long timeout) {
+    public void set(String key, Object value, long timeout) {
         redisTemplate.opsForValue().set(defaultPrefix + key, value, timeout, TimeUnit.SECONDS);
     }
 
