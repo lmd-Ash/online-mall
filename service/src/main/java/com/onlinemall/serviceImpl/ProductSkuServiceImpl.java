@@ -45,6 +45,6 @@ public class ProductSkuServiceImpl implements ProductSkuService {
         Example example = new Example(ProductSku.class);
         example.createCriteria().andEqualTo("isAvailable", true)
                 .andIn("productId", productIds);
-        return productSkuMapper.selectByExample(example);;
+        return productSkuMapper.selectByExample(example);
     }
 }
