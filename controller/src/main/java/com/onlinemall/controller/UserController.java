@@ -7,45 +7,28 @@ import com.onlinemall.req.UserReq;
 import com.onlinemall.service.UserService;
 import com.onlinemall.tkmybatis.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
 /**
  * @author 11923
  */
-@Controller
-@RequestMapping("")
+@RestController
+@RequestMapping("/back/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * 跳转登录页面
-     */
-    @RequestMapping("/login")
-    public String loginIndex() {
-        return "login/login";
-    }
-
-    /**
-     * 跳转注册页面
-     */
-    @RequestMapping("/register")
-    public String registerIndex() {
-        return "login/register";
-    }
 
     /**
      * 员工注册
      */
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping(value = "/register")
     public Result userRegister(@RequestBody @Validated(Insert.class) UserReq userReq) {
         User user = userService.findByLoginName(userReq.getLoginName());
         if (Objects.nonNull(user)) {
