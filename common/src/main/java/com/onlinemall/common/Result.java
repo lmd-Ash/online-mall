@@ -42,7 +42,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> com.onlinemall.common.Result<T> buildOk(T data) {
-        return new com.onlinemall.common.Result<T>(data);
+        return new com.onlinemall.common.Result<T>(Msg.OK, Msg.TEXT_OK, data);
     }
 
     public static <T> com.onlinemall.common.Result<T> buildOk() {
@@ -55,6 +55,14 @@ public class Result<T> implements Serializable {
 
     public static <T> com.onlinemall.common.Result<T> build(Integer code, String msg) {
         return new com.onlinemall.common.Result<T>(code, msg, null);
+    }
+
+    public static <T> com.onlinemall.common.Result<T> buildFail(String msg, T data) {
+        return new com.onlinemall.common.Result<T>(Msg.FAIL, msg, data);
+    }
+
+    public static <T> com.onlinemall.common.Result<T> buildFail(String msg) {
+        return new com.onlinemall.common.Result<T>(Msg.FAIL, msg, null);
     }
 
     /**

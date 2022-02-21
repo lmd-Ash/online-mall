@@ -3,6 +3,7 @@ package com.onlinemall.req;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.onlinemall.tkmybatis.Insert;
+import com.onlinemall.tkmybatis.Update;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,13 +31,13 @@ public class UserReq extends BaseReq implements Serializable {
     /**
      * 用户名
      */
-    @NotBlank(message = "请填写登录名", groups = Insert.class)
+    @NotBlank(message = "请填写登录名", groups = {Insert.class, Update.class})
     private String loginName;
 
     /**
      * 密码
      */
-    @NotBlank(message = "请填写密码", groups = Insert.class)
+    @NotBlank(message = "请填写密码", groups = {Insert.class, Update.class})
     private String password;
 
 }

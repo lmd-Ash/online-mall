@@ -4,8 +4,10 @@ import com.onlinemall.common.Msg;
 import com.onlinemall.common.Result;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.UserReq;
+import com.onlinemall.resp.UserResp;
 import com.onlinemall.service.UserService;
 import com.onlinemall.tkmybatis.Insert;
+import com.onlinemall.tkmybatis.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,5 +41,21 @@ public class UserController {
             return Result.build(Msg.OK, Msg.TEXT_REGISTER_OK);
         }
         return Result.build(Msg.FAIL, Msg.TEXT_REGISTER_FAIL);
+    }
+
+    /**
+     * 员工登录
+     */
+    @PostMapping("/login")
+    public Result login(@RequestBody @Validated(Update.class) UserReq userReq) {
+        User user = userService.findByLoginName(userReq.getLoginName());
+        if (Objects.isNull(user)) {
+            return Result.buildFail(Msg.TEXT_USER_DATA_FAIL);
+        }
+        UserResp userResp = userService.userLogin(userReq);
+        if (Objects.isNull(userResp)) {
+            return Result.buildFail(Msg.TEXT_USER_DATA_FAIL);
+        }
+        return Result.build(Msg.OK, Msg.TEXT_LOGIN_OK, userResp);
     }
 }

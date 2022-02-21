@@ -1,10 +1,12 @@
 package com.onlinemall.mybatis_entity;
 
 import com.onlinemall.tkmybatis.BaseEntity;
+
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Serializable {
     /**
      * 员工id
      */

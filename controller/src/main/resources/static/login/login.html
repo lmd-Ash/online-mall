@@ -42,13 +42,13 @@
 
 <div class="container">
 
-    <form class="form-signin">
+    <div class="form-signin">
         <h2 class="form-signin-heading">欢迎来到网上商城</h2>
         <label for="loginName" class="sr-only">用户名</label>
         <input type="text" id="loginName" class="form-control" placeholder="请输入用户名" required autofocus>
-        <label for="inputPassword" class="sr-only">请输入密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">确认登录</button>
+        <label for="password" class="sr-only">请输入密码</label>
+        <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="backLogin()">确认登录</button>
         <div style="float: left">
             <label>
                 <a href="/login/changePassword.html">忘记密码</a>
@@ -56,32 +56,53 @@
         </div>
         <div style="float: right">
             <label>
-                <a href="/login/register.html" >注册</a>
+                <a href="/login/register.html">注册</a>
             </label>
         </div>
-    </form>
+    </div>
 
 </div> <!-- /container -->
 
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../js/common.js"></script>
 <script>
-    function register() {
-        // $.ajax({
-        //     url: '/register',
-        //     type: 'get',
-        //     dataType: 'json',
-        //     data: {},
-        //     success: function (response, xml) {
-        //         // 请求成功后执行的代码
-        //     },
-        //     error: function (status) {
-        //         // 失败后执行的代码
-        //     }
-        // });
-        location.href = "/login/register.html";
-    }
+    function backLogin() {
+        let data = {
+            loginName: $("#loginName").val(),
+            password: $("#password").val()
+        };
+        data = JSON.stringify(data);
+        $.ajax({
+            url: '/back/user/login',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: data,
+            success: function (result) {
+                console.log(result);
+                // 请求成功后执行的代码
+                var newData = JSON.stringify(result);    //将json对象转换为字符串
+                newData = eval("(" + newData + ")");   //解析json
+                console.log(newData);
+                if (newData.code == 200) {
+                    alert("消息:" + newData.msg);
+                    console.log(newData.data.token);
+                    // 存入token
+                    setToken(newData.data.token);
+                    // 跳转商品管理
+                    window.location.href = "../product/backProduct.html";
+                } else {
+                    alert("消息:" + newData.msg);
+                }
+            },
+            error: function () {
+                // 失败后执行的代码
+                alert("消息:注册失败");
+            }
+        });
+    };
 </script>
 </body>
 </html>

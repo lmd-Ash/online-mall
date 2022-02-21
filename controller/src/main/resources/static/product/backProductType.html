@@ -11,6 +11,11 @@
   <link rel="icon" href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/favicon.ico">
   <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/dashboard/">
 
+  <link href="../css/index.css" rel="stylesheet"/>
+  <script src="../js/vue.js"></script>
+  <script src="../js/axios.js"></script>
+  <script src="../js/index.js"></script>
+
   <title>网上商城后管</title>
 
   <!-- Bootstrap core CSS -->
@@ -62,20 +67,23 @@
   </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid" id="app">
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
-        <li><a href="/user/backUser.html">员工管理</a></li>
-        <li class="active"><a href="/product/backProductType.html">商品分类管理 <span class="sr-only">(current)</span></a></li>
-        <li><a href="/product/backProduct.html">商品管理</a></li>
-        <li><a href="/order/backOrder.html">订单管理</a></li>
+        <li><a href="../user/backUser.html">员工管理</a></li>
+        <li class="active"><a href="../product/backProductType.html">商品分类管理 <span class="sr-only">(current)</span></a></li>
+        <li><a href="../product/backProduct.html">商品管理</a></li>
+        <li><a href="../order/backOrder.html">订单管理</a></li>
       </ul>
 
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
       <div class="table-responsive">
+
+        <el-button type="primary" @click="add">新增</el-button>
+
         <table class="table table-striped">
           <thead>
           <tr>
@@ -204,6 +212,50 @@
       </div>
     </div>
   </div>
+
+  <!--模态框-->
+  <el-dialog
+          title="提示"
+          :visible.sync="dialogVisible"
+          width="30%">
+    <!--:model="empForm":绑定表单数据  :rules="rules"：验证规则-->
+    <el-form :model="productForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="商品编号" prop="id">
+        <el-input v-model="productForm.id"></el-input>
+      </el-form-item>
+      <el-form-item label="商品名称" prop="pname">
+        <el-input v-model="productForm.pname"></el-input>
+      </el-form-item>
+      <el-form-item label="商品价格" prop="price">
+        <el-input v-model="productForm.price"></el-input>
+      </el-form-item>
+
+
+      <el-form-item label="商品类别" prop="brand">
+        <el-select v-model="productForm.brand" filterable placeholder="请选择类别" value-key="bid">
+          <el-option
+                  v-for="item in brandList"
+                  :key="item.bid"
+                  :label="item.bname"
+                  :value="item">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+
+      <el-form-item label="上架时间" required>
+        <el-form-item prop="prodate">
+          <el-date-picker type="date" placeholder="选择日期" v-model="productForm.prodate"
+                          style="width: 100%;"></el-date-picker>
+        </el-form-item>
+      </el-form-item>
+    </el-form>
+
+    <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitForm()">确 定</el-button>
+        </span>
+  </el-dialog>
 </div>
 
 <!-- Bootstrap core JavaScript
@@ -216,5 +268,45 @@
 <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/assets/js/vendor/holder.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script>
+  var vm = new Vue({
+    el: "#app",
+    data: {
+      dialogVisible: false,  // 用来控制模态框是否显示
+      brandList: [],// 获取的部门集合用来绑定下拉框
+      productForm: {} // 表单数据
+    },
+    mounted: function () {
+      // 调用函数初始化
+    },
+    methods: {
+      add: function () {
+        this.productForm = {};
+        this.dialogVisible = true;
+      },
+      submitForm: function () {
+        alert("111")
+        // this.validate((valid) => {
+        //     if (valid) {
+        //         axios.post("/product/add", this.productForm).then(response => {
+        //             this.dialogVisible = false;
+        //             if (response.data >= 1) {
+        //                 this.$message({
+        //                     message: '添加成功',
+        //                     type: 'success'
+        //                 })
+        //             } else {
+        //                 this.$message({
+        //                     message: '添加失败',
+        //                     type: 'error'
+        //                 })
+        //             }
+        //         })
+        //     }
+        // })
+      }
+    }
+  })
+</script>
 </body>
 </html>
