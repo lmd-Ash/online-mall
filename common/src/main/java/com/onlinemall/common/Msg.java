@@ -42,6 +42,7 @@ public interface Msg {
 
     Integer IMAGE_FAIL = 320;
     String TEXT_IMAGE_FAIL = "图片格式无法识别";
+    String TEXT_IMAGE_EMPTY = "请选择图片";
 
     Integer SAVE_FAIL = 330;
     String TEXT_SAVE_FAIL = "保存失败";

@@ -39,9 +39,19 @@ public class ProductResp extends BaseReq implements Serializable {
     private String productName;
 
     /**
-     * 商品sku集合
+     * 商品售价(单位：元)
      */
-    private List<ProductSkuResp> productSkuResps;
+    private String sellingPrice;
+
+    /**
+     * 商品规格
+     */
+    private String specs;
+
+    /**
+     * 商品库存
+     */
+    private Integer skuNum;
 
     /**
      * 是否上架，1：是，0：否

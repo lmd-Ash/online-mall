@@ -1,5 +1,7 @@
 package com.onlinemall.mybatis_entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.onlinemall.tkmybatis.BaseEntity;
 import java.util.Date;
 import javax.persistence.*;
@@ -22,6 +24,7 @@ public class ProductType extends BaseEntity {
     /**
      * 创建时间
      */
+    @TableField(insertStrategy = FieldStrategy.NEVER)
     @Column(name = "create_time")
     private Date createTime;
 
@@ -34,6 +37,7 @@ public class ProductType extends BaseEntity {
     /**
      * 修改时间
      */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     @Column(name = "update_time")
     private Date updateTime;
 
@@ -46,6 +50,7 @@ public class ProductType extends BaseEntity {
     /**
      * 是否可用，1：可用，0：不可用
      */
+    @TableField(insertStrategy = FieldStrategy.NEVER)
     @Column(name = "is_available")
     private Boolean isAvailable;
 

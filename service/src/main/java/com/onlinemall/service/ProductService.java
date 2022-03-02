@@ -17,7 +17,7 @@ public interface ProductService {
      * @param productReq
      * @return
      */
-    int saveProduct(ProductReq productReq, User user);
+    Integer saveProduct(ProductReq productReq, User user);
 
     /**
      * 根据商品id查询商品

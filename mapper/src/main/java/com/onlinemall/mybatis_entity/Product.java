@@ -1,6 +1,7 @@
 package com.onlinemall.mybatis_entity;
 
 import com.onlinemall.tkmybatis.BaseEntity;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -23,6 +24,30 @@ public class Product extends BaseEntity {
      */
     @Column(name = "product_name")
     private String productName;
+
+    /**
+     * 图片url集合
+     */
+    @Column(name = "img_urls")
+    private String imgUrls;
+
+    /**
+     * 商品售价(单位：元)
+     */
+    @Column(name = "selling_price")
+    private BigDecimal sellingPrice;
+
+    /**
+     * 商品规格
+     */
+    @Column(name = "specs")
+    private String specs;
+
+    /**
+     * 商品库存
+     */
+    @Column(name = "sku_num")
+    private Integer skuNum;
 
     /**
      * 是否上架，1：是，0：否
@@ -124,6 +149,78 @@ public class Product extends BaseEntity {
      */
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    /**
+     * 获取图片url集合
+     *
+     * @return img_urls - 图片url集合
+     */
+    public String getImgUrls() {
+        return imgUrls;
+    }
+
+    /**
+     * 设置图片url集合
+     *
+     * @param imgUrls 图片url集合
+     */
+    public void setImgUrls(String imgUrls) {
+        this.imgUrls = imgUrls;
+    }
+
+    /**
+     * 获取商品售价(单位：元)
+     *
+     * @return selling_price - 商品售价(单位：元)
+     */
+    public BigDecimal getSellingPrice() {
+        return sellingPrice;
+    }
+
+    /**
+     * 设置商品售价(单位：元)
+     *
+     * @param sellingPrice 商品售价(单位：元)
+     */
+    public void setSellingPrice(BigDecimal sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    /**
+     * 获取商品规格
+     *
+     * @return specs - 商品规格
+     */
+    public String getSpecs() {
+        return specs;
+    }
+
+    /**
+     * 设置商品规格
+     *
+     * @param specs 商品规格
+     */
+    public void setSpecs(String specs) {
+        this.specs = specs;
+    }
+
+    /**
+     * 获取商品库存
+     *
+     * @return sku_num - 商品库存
+     */
+    public Integer getSkuNum() {
+        return skuNum;
+    }
+
+    /**
+     * 设置商品库存
+     *
+     * @param skuNum 商品库存
+     */
+    public void setSkuNum(Integer skuNum) {
+        this.skuNum = skuNum;
     }
 
     /**

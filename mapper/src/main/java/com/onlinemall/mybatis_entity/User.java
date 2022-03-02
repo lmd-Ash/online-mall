@@ -1,11 +1,14 @@
 package com.onlinemall.mybatis_entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.onlinemall.tkmybatis.BaseEntity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
+@Table(name = "user")
 public class User extends BaseEntity implements Serializable {
     /**
      * 员工id
@@ -31,6 +34,12 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "login_name")
     private String loginName;
 
+    /**
+     * 创建时间（数据库自动生成，无需手动赋值）
+     */
+    @TableField(insertStrategy = FieldStrategy.NEVER)
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * 创建人id
@@ -38,6 +47,12 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "create_user_id")
     private Integer createUserId;
 
+    /**
+     * 修改时间（数据库自动生成，无需手动赋值）
+     */
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * 修改人id
@@ -46,8 +61,9 @@ public class User extends BaseEntity implements Serializable {
     private Integer updateUserId;
 
     /**
-     * 是否可用，1：可用，0：不可用
+     * 是否可用，1：可用，0：不可用（数据库自动生成，无需手动赋值）
      */
+    @TableField(insertStrategy = FieldStrategy.NEVER)
     @Column(name = "is_available")
     private Boolean isAvailable;
 
@@ -56,6 +72,7 @@ public class User extends BaseEntity implements Serializable {
      *
      * @return id - 员工id
      */
+    @Override
     public Integer getId() {
         return id;
     }
@@ -124,9 +141,27 @@ public class User extends BaseEntity implements Serializable {
     }
 
     /**
-     * ��ȡ������id
+     * 获取创建时间
      *
-     * @return create_user_id - ������id
+     * @return create_time - 创建时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取创建人id
+     *
+     * @return create_user_id - 创建人id
      */
     public Integer getCreateUserId() {
         return createUserId;
@@ -142,9 +177,27 @@ public class User extends BaseEntity implements Serializable {
     }
 
     /**
-     * ��ȡ�޸���id
+     * 获取修改时间
      *
-     * @return update_user_id - �޸���id
+     * @return update_time - 修改时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置修改时间
+     *
+     * @param updateTime 修改时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取修改人id
+     *
+     * @return update_user_id - 修改人id
      */
     public Integer getUpdateUserId() {
         return updateUserId;

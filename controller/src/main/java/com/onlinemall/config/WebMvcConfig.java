@@ -24,7 +24,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 // 需要拦截的uri
                 .addPathPatterns("/back/**", "/front/**")
                 // 需要跳过的uri
-                .excludePathPatterns("/user/login", "/back/user/register", "/back/user/login")
+                .excludePathPatterns("/user/login", "/back/user/register", "/back/user/login", "/back/product/upload",
+                "/back/productType/findAll")
                 // 拦截器的执行顺序 设置高一点方便后期扩展
                 .order(0);
     }

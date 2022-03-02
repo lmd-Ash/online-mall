@@ -7,13 +7,11 @@ import com.onlinemall.common.MyPageInfo;
 import com.onlinemall.exception.CustomException;
 import com.onlinemall.mapper.ProductMapper;
 import com.onlinemall.mybatis_entity.Product;
-import com.onlinemall.mybatis_entity.ProductSku;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.ProductReq;
 import com.onlinemall.resp.ProductResp;
 import com.onlinemall.resp.ProductSkuResp;
 import com.onlinemall.service.ProductService;
-import com.onlinemall.service.ProductSkuService;
 import com.onlinemall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,8 +37,6 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ProductSkuService productSkuService;
 
     private User init(HttpSession session) {
         User user = (User) session.getAttribute(userSession);
@@ -50,22 +46,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int saveProduct(ProductReq productReq, User user) {
+    public Integer saveProduct(ProductReq productReq, User user) {
+        StringBuilder builder = new StringBuilder();
         // 保存商品基本信息
         Product product = BeanMapper.map(productReq, Product.class);
         assert product != null;
         product.setCreateUserId(user.getId());
+        for (String imgUrl : productReq.getImgUrlList()) {
+            builder.append(imgUrl).append(",");
+        }
+        product.setImgUrls(builder.toString());
         Integer key = productMapper.saveProduct(product);
         if (Objects.isNull(key)) {
             throw new CustomException(Msg.TEXT_SAVE_FAIL);
         }
-        // 保存商品sku信息
-        productReq.setId(key);
-        int save = productSkuService.save(productReq, user);
-        if (save < 1) {
-            throw new CustomException(Msg.TEXT_SAVE_FAIL);
-        }
-        return save;
+        return key;
     }
 
     @Override
@@ -89,14 +84,14 @@ public class ProductServiceImpl implements ProductService {
         List<ProductResp> productResps = productMapper.findAll(searchMap);
         // 获取商品id集合
         List<Integer> productIds = productResps.stream().map(ProductResp::getId).collect(Collectors.toList());
-        // 查询商品sku集合
-        List<ProductSku> productSkus = productSkuService.findAllByProductIds(productIds);
-        // 转换成productId为key，ProductSku集合为value map
-        Map<Integer, List<ProductSku>> productSkusMap = productSkus.stream().collect(Collectors.groupingBy(ProductSku::getProductId));
-        for (ProductResp productResp : productResps) {
-            List<ProductSku> productSkuList = productSkusMap.get(productResp.getProductTypeId());
-            productResp.setProductSkuResps(BeanMapper.mapList(productSkuList, ProductSkuResp.class));
-        }
+//        // 查询商品sku集合
+//        List<ProductSku> productSkus = productSkuService.findAllByProductIds(productIds);
+//        // 转换成productId为key，ProductSku集合为value map
+//        Map<Integer, List<ProductSku>> productSkusMap = productSkus.stream().collect(Collectors.groupingBy(ProductSku::getProductId));
+//        for (ProductResp productResp : productResps) {
+//            List<ProductSku> productSkuList = productSkusMap.get(productResp.getProductTypeId());
+//            productResp.setProductSkuResps(BeanMapper.mapList(productSkuList, ProductSkuResp.class));
+//        }
         return new MyPageInfo<>(productResps);
     }
 

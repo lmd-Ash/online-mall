@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onlinemall.mapper.ProductMapper">
-    <resultMap id="BaseResultMap" type="com.onlinemall.mybatis_entity.Product">
-        <!--
-          WARNING - @mbg.generated
-        -->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="product_type_id" jdbcType="INTEGER" property="productTypeId"/>
-        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
-        <result column="is_show" jdbcType="BIT" property="isShow"/>
-        <result column="show_time" jdbcType="TIMESTAMP" property="showTime"/>
-        <result column="show_user_id" jdbcType="INTEGER" property="showUserId"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="create_user_id" jdbcType="INTEGER" property="createUserId"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="update_user_id" jdbcType="INTEGER" property="updateUserId"/>
-        <result column="is_available" jdbcType="BIT" property="isAvailable"/>
-    </resultMap>
-    <insert id="saveProduct" parameterType="com.onlinemall.mybatis_entity.Product" useGeneratedKeys="true"
-            keyProperty="id">
-        insert into product (product_name, create_user_id)
-        values (#{productName}, #{createUserId})
+  <resultMap id="BaseResultMap" type="com.onlinemall.mybatis_entity.Product">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_type_id" jdbcType="INTEGER" property="productTypeId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="img_urls" jdbcType="VARCHAR" property="imgUrls" />
+    <result column="selling_price" jdbcType="DECIMAL" property="sellingPrice" />
+    <result column="specs" jdbcType="VARCHAR" property="specs" />
+    <result column="sku_num" jdbcType="INTEGER" property="skuNum" />
+    <result column="is_show" jdbcType="BIT" property="isShow" />
+    <result column="show_time" jdbcType="TIMESTAMP" property="showTime" />
+    <result column="show_user_id" jdbcType="INTEGER" property="showUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user_id" jdbcType="INTEGER" property="updateUserId" />
+    <result column="is_available" jdbcType="BIT" property="isAvailable" />
+  </resultMap>
+    <insert id="saveProduct" keyProperty="id" parameterType="com.onlinemall.mybatis_entity.Product" useGeneratedKeys="true">
+        insert into product (product_type_id, product_name, img_urls, selling_price, specs, sku_num, is_show, create_user_id)
+        values (#{productTypeId}, #{productName}, #{imgUrls}, #{sellingPrice}, #{specs}, #{skuNum}, 0, #{createUserId})
     </insert>
     <select id="findAllByMap" parameterType="java.util.Map" resultType="map">
         SELECT

@@ -113,61 +113,52 @@
             width="70%">
         <!--:model="empForm":绑定表单数据  :rules="rules"：验证规则-->
         <el-form :model="productForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="商品编号" prop="id">
-                <el-input v-model="productForm.id"></el-input>
+            <el-form-item label="商品名称" prop="productName">
+                <el-input v-model="productForm.productName"></el-input>
             </el-form-item>
-            <el-form-item label="商品名称" prop="pname">
-                <el-input v-model="productForm.pname"></el-input>
+            <el-form-item label="商品价格" prop="sellingPrice">
+                <el-input v-model="productForm.sellingPrice"></el-input>
             </el-form-item>
-            <el-form-item label="商品价格" prop="price">
-                <el-input v-model="productForm.price"></el-input>
+            <el-form-item label="商品规格" prop="specs">
+                <el-input v-model="productForm.specs"></el-input>
+            </el-form-item>
+            <el-form-item label="商品库存" prop="skuNum">
+                <el-input v-model="productForm.skuNum"></el-input>
             </el-form-item>
 
-
-            <el-form-item label="商品类别" prop="brand">
-                <el-select v-model="productForm.brand" filterable placeholder="请选择类别" value-key="bid">
+            <el-form-item label="商品类别" prop="productTypeId">
+                <el-select v-model="productForm.productTypeId" filterable placeholder="请选择类别" value-key="id">
                     <el-option
-                            v-for="item in brandList"
-                            :key="item.bid"
-                            :label="item.bname"
-                            :value="item">
+                            v-for="item in productTypeList"
+                            :key="item.id"
+                            :label="item.productTypeName"
+                            :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
 
 
-            <el-form-item label="上架时间" required>
-                <el-form-item prop="prodate">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="productForm.prodate"
-                                    style="width: 100%;"></el-date-picker>
-                </el-form-item>
-            </el-form-item>
+            <!--            <el-form-item label="上架时间" required>-->
+            <!--                <el-form-item prop="prodate">-->
+            <!--                    <el-date-picker type="date" placeholder="选择日期" v-model="productForm.prodate"-->
+            <!--                                    style="width: 100%;"></el-date-picker>-->
+            <!--                </el-form-item>-->
+            <!--            </el-form-item>-->
+
         </el-form>
 
-        <el-form :model="form">
-            <el-form-item label="上传图片" :label-width="formLabelWidth">
-                <el-upload
-                        ref="upload"
-                        action="#"
-                        accept="image/png,image/gif,image/jpg,image/jpeg"
-                        list-type="picture-card"
-                        :limit=limitNum
-                        :auto-upload="false"
-                        :on-exceed="handleExceed"
-                        :before-upload="handleBeforeUpload"
-                        :on-preview="handlePictureCardPreview"
-                        :on-remove="handleRemove">
-                    <i class="el-icon-plus"></i>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible2">
-                    <img width="100%" :src="dialogImageUrl" alt="">
-                </el-dialog>
-            </el-form-item>
-            <el-form-item>
-                <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
-                <el-button size="small">取消</el-button>
-            </el-form-item>
-        </el-form>
+        <el-upload
+                ref="upload"
+                accept="image/png,image/gif,image/jpg,image/jpeg"
+                list-type="picture-card"
+                action="#"
+                :file-list="fileList"
+                @on-change="handleChange"
+                :http-request="getFile"
+        >
+            <el-button size="small" type="primary">上传</el-button>
+        </el-upload>
+        <el-button size="small" type="success" @click="upload">确认上传</el-button>
 
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -205,7 +196,6 @@
             $("#tbody").append(tr);
         }
 
-        getTest();
     });
 
     function getTest() {
@@ -228,12 +218,15 @@
     }
 
     var vm = new Vue({
+        commonConfig: {
+            headers: {Authorization: getToken()}
+        },
         el: "#app",
         data: {
             // 用来控制模态框是否显示
             dialogVisible: false,
-            // 获取的部门集合用来绑定下拉框
-            brandList: [],
+            // 获取的商品分类集合用来绑定下拉框
+            productTypeList: [],
             // 表单数据
             productForm: {},
 
@@ -241,71 +234,72 @@
             dialogVisible2: false,
             formLabelWidth: '80px',
             limitNum: 3,
-            form: {}
+            fileList: [],
+            imgList: [],
+            imgUrlS: [],
+            file: {}
         },
         mounted: function () {
             // 调用函数初始化
+            this.fileList = [];
+            this.getProductType();
         },
         methods: {
+            getProductType: function () {
+                axios.get("/back/productType/findAll").then(response => {
+                    console.info(response.data.data);
+                    this.productTypeList = response.data.data;
+                })
+            },
             add: function () {
                 this.productForm = {};
                 this.dialogVisible = true;
             },
             submitForm: function () {
-                alert("111")
-                // this.validate((valid) => {
-                //     if (valid) {
-                //         axios.post("/product/add", this.productForm).then(response => {
-                //             this.dialogVisible = false;
-                //             if (response.data >= 1) {
-                //                 this.$message({
-                //                     message: '添加成功',
-                //                     type: 'success'
-                //                 })
-                //             } else {
-                //                 this.$message({
-                //                     message: '添加失败',
-                //                     type: 'error'
-                //                 })
-                //             }
-                //         })
-                //     }
-                // })
-            },
-
-            // 上传文件之前的钩子
-            handleBeforeUpload(file) {
-                console.log('before')
-                if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
-                    this.$notify.warning({
-                        title: '警告',
-                        message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
-                    })
-                }
-                let size = file.size / 1024 / 1024 / 2
-                if (size > 2) {
-                    this.$notify.warning({
-                        title: '警告',
-                        message: '图片大小必须小于2M'
-                    })
-                }
-            },
-            // 文件超出个数限制时的钩子
-            handleExceed(files, fileList) {
+                this.$set(this.productForm, "imgUrlList", this.imgUrls);
+                console.log(this.productForm);
+                axios.post("/back/product/add", this.productForm, {
+                    headers: {
+                        'Authorization': getToken(),
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    this.dialogVisible = false;
+                    if (response.data.code === 200) {
+                        this.$message({
+                            message: '添加成功',
+                            type: 'success'
+                        })
+                    } else {
+                        this.$message({
+                            message: response.data.msg,
+                            type: 'error'
+                        })
+                    }
+                })
 
             },
-            // 文件列表移除文件时的钩子
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+
+            getFile(item) {
+                this.file = item.file
+                this.imgList.push(this.file)
             },
-            // 点击文件列表中已上传的文件时的钩子
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+            handleChange(file, fileList) {
+                this.fileList = fileList.slice(-3);
             },
-            uploadFile() {
-                this.$refs.upload.submit()
-            }
+            upload() {
+                const formData = new FormData()
+                for (let i = 0; i < this.imgList.length; i++) {
+                    formData.append('imgList', this.imgList[i]);
+                }
+                console.log(formData.get('imgList'))
+                const config = {headers: {'Content-Type': 'multipart/form-data'}}
+                axios.post('/back/product/upload', formData, config).then(response => {
+                    this.imgUrls = response.data.data;
+                    console.log(this.imgUrls);
+                    this.$message.success("上传成功");
+                })
+            },
         }
     })
 </script>

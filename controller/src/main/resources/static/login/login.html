@@ -87,7 +87,7 @@
                 newData = eval("(" + newData + ")");   //解析json
                 console.log(newData);
                 if (newData.code == 200) {
-                    alert("消息:" + newData.msg);
+                    // alert("消息:" + newData.msg);
                     console.log(newData.data.token);
                     // 存入token
                     setToken(newData.data.token);
