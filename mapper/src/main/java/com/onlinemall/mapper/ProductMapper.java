@@ -19,14 +19,6 @@ public interface ProductMapper extends BaseMapper<Product> {
     Integer saveProduct(Product product);
 
     /**
-     * 条件查询所有的商品
-     *
-     * @param searchMap
-     * @return
-     */
-    List<Map<String, String>> findAllByMap(Map<String, String> searchMap);
-
-    /**
      * 条件查询所有的商品数量
      *
      * @param searchMap
@@ -34,5 +26,16 @@ public interface ProductMapper extends BaseMapper<Product> {
      */
     Integer countByMap(Map<String, String> searchMap);
 
+    /**
+     * 查询商品
+     */
     List<ProductResp> findAll(Map<String, String> searchMap);
+
+    /**
+     * 更新商品
+     *
+     * @param product
+     * @return
+     */
+    Integer update(Product product);
 }

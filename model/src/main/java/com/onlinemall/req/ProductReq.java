@@ -25,7 +25,7 @@ public class ProductReq extends BaseReq implements Serializable {
     /**
      * 商品分类id
      */
-    @NotNull(message = "请选择分类", groups = {Insert.class, Update.class})
+    @NotNull(message = "请选择分类", groups = {Insert.class})
     private Integer productTypeId;
 
     /**

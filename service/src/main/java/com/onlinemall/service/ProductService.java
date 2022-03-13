@@ -1,6 +1,5 @@
 package com.onlinemall.service;
 
-import com.onlinemall.common.MallPage;
 import com.onlinemall.common.MyPageInfo;
 import com.onlinemall.mybatis_entity.Product;
 import com.onlinemall.mybatis_entity.User;
@@ -8,7 +7,6 @@ import com.onlinemall.req.ProductReq;
 import com.onlinemall.resp.ProductResp;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ProductService {
     /**
@@ -33,7 +31,7 @@ public interface ProductService {
      * @param productReq
      * @return
      */
-    MyPageInfo<Map<String, String>> findAll(ProductReq productReq);
+    List<ProductResp> findAll(ProductReq productReq);
 
     /**
      * 查询商品集合
@@ -42,4 +40,13 @@ public interface ProductService {
      * @return
      */
     MyPageInfo<ProductResp> pageAll(ProductReq productReq);
+
+    /**
+     * 更新商品
+     *
+     * @param productReq
+     * @param user
+     * @return
+     */
+    Integer update(ProductReq productReq, User user);
 }

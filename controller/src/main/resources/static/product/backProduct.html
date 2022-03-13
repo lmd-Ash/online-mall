@@ -92,10 +92,12 @@
                     <thead>
                     <tr>
                         <th>操作</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
+                        <th>商品分类</th>
+                        <th>商品名称</th>
+                        <th>商品图片</th>
+                        <th>商品价格（元）</th>
+                        <th>商品单位</th>
+                        <th>商品库存</th>
                     </tr>
                     </thead>
                     <tbody id="tbody">
@@ -185,22 +187,16 @@
         // 获取token
         let token = getToken();
         console.log(token);
-        for (let i = 0; i < 2; i++) {
-            let tr = $("<tr />");
-            let td = $("<td><a class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></a></td>" +
-                "<td>循环增加2</td>" +
-                "<td>循环增加3</td>" +
-                "<td>循环增加4</td>" +
-                "<td>循环增加5</td>");
-            tr.append(td)
-            $("#tbody").append(tr);
-        }
+        getProducts();
+
 
     });
 
-    function getTest() {
+    let productsData = [];
+
+    function getProducts() {
         $.ajax({
-            url: '/back/test',
+            url: '/back/product/list',
             type: 'get',
             dataType: 'json',
             contentType: 'application/json',
@@ -208,11 +204,21 @@
                 "Authorization": getToken()
             },
             success: function (result) {
-                alert("++++")
-            },
-            error: function () {
-                // 失败后执行的代码
-                alert("消息:注册失败");
+                console.log(result);
+                productsData = result.data;
+                for (let i = 0; i < productsData.length; i++) {
+                    console.log(productsData[i]);
+                    let tr = $("<tr />");
+                    let td = $("<td><a href='backProduct.edit.html?id=" + productsData[i].id + "' class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"></a></td>" +
+                        "<td>" + productsData[i].productTypeName + "</td>" +
+                        "<td>" + productsData[i].productName + "</td>" +
+                        "<td><img src=" + productsData[i].imgUrlList[0] + " width=\"50px\" height=\"30px\" /></td>" +
+                        "<td>" + productsData[i].sellingPrice + "</td>" +
+                        "<td>" + productsData[i].specs + "</td>" +
+                        "<td>" + productsData[i].skuNum + "</td>");
+                    tr.append(td)
+                    $("#tbody").append(tr);
+                }
             }
         });
     }
@@ -247,7 +253,6 @@
         methods: {
             getProductType: function () {
                 axios.get("/back/productType/findAll").then(response => {
-                    console.info(response.data.data);
                     this.productTypeList = response.data.data;
                 })
             },

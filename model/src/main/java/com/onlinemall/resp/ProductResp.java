@@ -4,15 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.onlinemall.req.BaseReq;
-import com.onlinemall.tkmybatis.Insert;
-import com.onlinemall.tkmybatis.Update;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -109,5 +104,15 @@ public class ProductResp extends BaseReq implements Serializable {
      * 修改人名称
      */
     private String showUserName;
+
+    /**
+     * 图片url集合
+     */
+    private List<String> imgUrlList;
+
+    /**
+     * 图片url集合
+     */
+    private String imgUrls;
 
 }

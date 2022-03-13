@@ -10,9 +10,9 @@ import com.onlinemall.mybatis_entity.Product;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.ProductReq;
 import com.onlinemall.resp.ProductResp;
-import com.onlinemall.resp.ProductSkuResp;
 import com.onlinemall.service.ProductService;
 import com.onlinemall.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -53,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
         assert product != null;
         product.setCreateUserId(user.getId());
         for (String imgUrl : productReq.getImgUrlList()) {
-            builder.append(imgUrl).append(",");
+            builder.append(imgUrl).append(";");
         }
         product.setImgUrls(builder.toString());
         Integer key = productMapper.saveProduct(product);
@@ -72,18 +68,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public MyPageInfo<Map<String, String>> findAll(ProductReq productReq) {
+    public List<ProductResp> findAll(ProductReq productReq) {
         Map<String, String> searchMap = this.getSearchMap(productReq);
-        List<Map<String, String>> mapList = productMapper.findAllByMap(searchMap);
-        return new MyPageInfo<>(mapList);
+        List<ProductResp> productResps = productMapper.findAll(searchMap);
+        this.imgHandle(productResps);
+        return productResps;
     }
 
     @Override
     public MyPageInfo<ProductResp> pageAll(ProductReq productReq) {
         Map<String, String> searchMap = this.getSearchMap(productReq);
         List<ProductResp> productResps = productMapper.findAll(searchMap);
+        this.imgHandle(productResps);
         // 获取商品id集合
-        List<Integer> productIds = productResps.stream().map(ProductResp::getId).collect(Collectors.toList());
+//        List<Integer> productIds = productResps.stream().map(ProductResp::getId).collect(Collectors.toList());
 //        // 查询商品sku集合
 //        List<ProductSku> productSkus = productSkuService.findAllByProductIds(productIds);
 //        // 转换成productId为key，ProductSku集合为value map
@@ -95,11 +93,28 @@ public class ProductServiceImpl implements ProductService {
         return new MyPageInfo<>(productResps);
     }
 
+    @Override
+    public Integer update(ProductReq productReq, User user) {
+        Product product = BeanMapper.map(productReq, Product.class);
+        assert product != null;
+        product.setUpdateUserId(user.getId());
+        return productMapper.update(product);
+    }
+
     private Map<String, String> getSearchMap(ProductReq productReq) {
         Map<String, String> searchMap = new HashMap<>(16);
         PageHelper.startPage(productReq.getPage(), productReq.getPageSize());
         searchMap.put("productName", productReq.getProductName());
         searchMap.put("productTypeId", Objects.nonNull(productReq.getProductTypeId()) ? productReq.getProductTypeId().toString() : null);
         return searchMap;
+    }
+
+    private void imgHandle(List<ProductResp> productResps) {
+        for (ProductResp productResp : productResps) {
+            if (StringUtils.isNotBlank(productResp.getImgUrls())) {
+                String[] imgUrls = productResp.getImgUrls().split(";");
+                productResp.setImgUrlList(Arrays.asList(imgUrls));
+            }
+        }
     }
 }

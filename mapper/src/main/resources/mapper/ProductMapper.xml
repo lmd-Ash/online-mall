@@ -25,40 +25,9 @@
         insert into product (product_type_id, product_name, img_urls, selling_price, specs, sku_num, is_show, create_user_id)
         values (#{productTypeId}, #{productName}, #{imgUrls}, #{sellingPrice}, #{specs}, #{skuNum}, 0, #{createUserId})
     </insert>
-    <select id="findAllByMap" parameterType="java.util.Map" resultType="map">
-        SELECT
-            sku.selling_price AS sellingPrice,
-            sku.cost_price AS costPrice,
-            sku.specs AS specs,
-            sku.unit AS unit,
-            sku.sku_num AS sku_num,
-            p.product_name AS productName,
-            DATE_FORMAT( p.create_time, '%Y-%m-%d %T' ) AS createTime,
-            u1.user_name AS createUser,
-            DATE_FORMAT( p.update_time, '%Y-%m-%d %T' ) AS updateTime,
-            u2.user_name AS updateUser,
-            DATE_FORMAT( p.show_time, '%Y-%m-%d %T' ) AS showTime,
-            u3.user_name AS showUser
-        FROM
-            product_sku sku
-        LEFT JOIN product p ON sku.product_Id = p.id
-        LEFT JOIN `user` u1 ON p.create_user_id = u1.id
-        LEFT JOIN `user` u2 ON p.update_user_id = u2.id
-        LEFT JOIN `user` u3 ON p.show_user_id = u3.id
-        <where>
-            sku.is_available = 1
-            AND p.is_available = 1
-            <if test="productName != null || productName != ''">
-                AND p.product_name LIKE concat('%', #{productName}, '%')
-            </if>
-            <if test="productTypeId != null || productTypeId != ''">
-                AND p.product_type_id = #{productTypeId}
-            </if>
-        </where>
-    </select>
     <select id="countByMap" parameterType="java.util.Map" resultType="int">
         SELECT
-            count(1);
+        count(1);
         FROM
         product_sku sku
         LEFT JOIN product p ON sku.product_Id = p.id
@@ -81,6 +50,10 @@
             p.id AS id,
             pt.product_type_name AS productTypeName,
             p.product_name AS productName,
+            p.img_urls AS imgUrls,
+            p.selling_price AS sellingPrice,
+            p.specs AS specs,
+            p.sku_num AS skuNum,
             p.is_show AS isShow,
             DATE_FORMAT( p.create_time, '%Y-%m-%d %T' ) AS createTime,
             u1.user_name AS createUserName,
@@ -96,12 +69,31 @@
         LEFT JOIN `user` u3 ON p.show_user_id = u3.id
         <where>
             p.is_available = 1
-            <if test="productName != null || productName != ''">
+            <if test="productName != null and productName != ''">
                 AND p.product_name LIKE concat('%', #{productName}, '%')
             </if>
-            <if test="productTypeId != null || productTypeId != ''">
+            <if test="productTypeId != null and productTypeId != ''">
                 AND p.product_type_id = #{productTypeId}
             </if>
         </where>
     </select>
+    <update id="update" parameterType="com.onlinemall.mybatis_entity.Product">
+        update product set
+        <if test="productName != null and productName != ''">
+            product_name = #{productName},
+        </if>
+        <if test="sellingPrice != null and sellingPrice != ''">
+            selling_price = #{sellingPrice},
+        </if>
+        <if test="specs != null and specs != ''">
+            specs = #{specs},
+        </if>
+        <if test="skuNum != null and skuNum != ''">
+            sku_num = #{skuNum},
+        </if>
+        <if test="updateUserId != null and updateUserId != ''">
+            update_user_id = #{updateUserId}
+        </if>
+        where id = #{id}
+    </update>
 </mapper>

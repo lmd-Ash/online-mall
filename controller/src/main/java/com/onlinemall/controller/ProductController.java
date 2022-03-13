@@ -1,12 +1,17 @@
 package com.onlinemall.controller;
 
+import com.onlinemall.common.BeanMapper;
 import com.onlinemall.common.Msg;
+import com.onlinemall.common.MyPageInfo;
 import com.onlinemall.common.Result;
+import com.onlinemall.mybatis_entity.Product;
 import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.ProductReq;
+import com.onlinemall.resp.ProductResp;
 import com.onlinemall.server.FastdfsService;
 import com.onlinemall.service.ProductService;
 import com.onlinemall.tkmybatis.Insert;
+import com.onlinemall.tkmybatis.Update;
 import com.onlinemall.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,4 +81,53 @@ public class ProductController {
         }
         return Result.buildSaveOk();
     }
+
+    /**
+     * 分页查询商品
+     */
+    @GetMapping("/page")
+    public Result<MyPageInfo<ProductResp>> page(ProductReq productReq) {
+        MyPageInfo<ProductResp> pageInfo = productService.pageAll(productReq);
+        return Result.buildQueryOk(pageInfo);
+    }
+
+    /**
+     * 查询商品集合
+     */
+    @GetMapping("/list")
+    public Result<List<ProductResp>> list(ProductReq productReq) {
+        List<ProductResp> productResps = productService.findAll(productReq);
+        return Result.buildQueryOk(productResps);
+    }
+
+    /**
+     * 根据id查询商品
+     */
+    @GetMapping("/find")
+    public Result<ProductResp> find(ProductReq productReq) {
+        Product product = productService.findById(productReq.getId());
+        if (Objects.isNull(product)) {
+            return Result.buildOk();
+        }
+        ProductResp productResp = BeanMapper.map(product, ProductResp.class);
+        return Result.buildQueryOk(productResp);
+    }
+
+    /**
+     * 修改商品
+     */
+    @PostMapping("/edit")
+    public Result<String> edit(@RequestBody @Validated(Update.class) ProductReq productReq, HttpSession session) {
+        Product product = productService.findById(productReq.getId());
+        if (Objects.isNull(product)) {
+            return Result.buildOk();
+        }
+        User user = getUser(session);
+        Integer update = productService.update(productReq, user);
+        if (update < 1) {
+            return Result.buildSaveFail();
+        }
+        return Result.buildSaveOk();
+    }
+
 }
