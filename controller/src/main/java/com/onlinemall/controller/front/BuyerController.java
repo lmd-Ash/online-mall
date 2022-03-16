@@ -1,4 +1,4 @@
-package com.onlinemall.controller;
+package com.onlinemall.controller.front;
 
 import com.onlinemall.common.Msg;
 import com.onlinemall.common.Result;
