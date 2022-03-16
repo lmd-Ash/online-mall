@@ -15,6 +15,6 @@
     <result column="is_available" jdbcType="BIT" property="isAvailable" />
   </resultMap>
   <insert id="register" parameterType="com.onlinemall.mybatis_entity.Buyer">
-    insert into buyer (user_name,password,login_name,phone) values (#{userName},#{password},#{loginName},#{phone})
+    insert into buyer (buyer_name,password,login_name,phone) values (#{buyerName},#{password},#{buyerName},#{phone})
   </insert>
 </mapper>

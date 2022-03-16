@@ -1,4 +1,4 @@
-package com.onlinemall.controller;
+package com.onlinemall.controller.back;
 
 import com.onlinemall.common.BeanMapper;
 import com.onlinemall.common.Msg;

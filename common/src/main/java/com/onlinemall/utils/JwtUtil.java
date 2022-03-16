@@ -12,10 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * jwt工具类
@@ -90,21 +87,18 @@ public class JwtUtil {
      * @return 返回参数
      */
     public static Map<String, String> verifyToken(String token) {
-        token = token.replaceFirst(TOKEN_PREFIX, "");
-        //使用HMAC256进行加密
-        Algorithm algorithm = Algorithm.HMAC256(SECRET);
-        //解密
-        JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
-        try {
-            DecodedJWT jwt = verifier.verify(token);
-            Map<String, Claim> map = jwt.getClaims();
-            Map<String, String> resultMap = new HashMap<>();
-            map.forEach((k, v) -> resultMap.put(k, v.asString()));
-            return resultMap;
-        } catch (TokenExpiredException ignored) {
+        Map<String, String> map = new HashMap<>(16);
+        Claims claim = getClaim(token);
+        if (Objects.isNull(claim)) {
+            return null;
         }
-        //token过期
-        return null;
+        Date expiration = claim.getExpiration();
+        if (isTokenExpired(expiration)) {
+            return null;
+        }
+        String string = claim.getSubject();
+        map.put("id", string);
+        return map;
     }
 
     /**

@@ -30,6 +30,7 @@ public interface Msg {
     String TEXT_LOGOUT_FAIL = "注销失败";
     String TEXT_OLD_PASSWORD_FAIL = "原密码不正确";
     String TEXT_LOGIN_NAME_EXIST = "登录名已经被注册";
+    String TEXT_PHONE_EXIST = "手机号已经被注册";
     String TEXT_LIKE_FAIL = "点赞失败，请重试";
 
     Integer PARAM_FAIL = 310;

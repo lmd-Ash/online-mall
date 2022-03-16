@@ -7,12 +7,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("")
 public class ViewController {
     /**
-     * 跳转登录页面
+     * 跳转后管登录页面
      */
     @RequestMapping("/login")
     public String loginIndex() {
         return "login/login";
     }
+
+    /**
+     * 跳转后管登录页面
+     */
+    @RequestMapping("/buyer/login")
+    public String login() {
+        return "login/buyerLogin";
+    }
+
 
     /**
      * 跳转注册页面

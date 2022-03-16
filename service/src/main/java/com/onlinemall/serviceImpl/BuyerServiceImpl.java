@@ -29,6 +29,8 @@ public class BuyerServiceImpl implements BuyerService {
      */
     @Value("${token.timeout}")
     private Integer tokenTimeOut;
+    @Value("${token.buyer.redis.prefix}")
+    private String tokenBuyerPrefix;
 
     @Override
     public Integer buyerRegister(BuyerReq buyerReq) {
@@ -40,16 +42,16 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
-    public Buyer findByLoginName(String loginName) {
-        Example example = new Example(User.class);
+    public Buyer findByPhone(String phone) {
+        Example example = new Example(Buyer.class);
         example.createCriteria().andEqualTo("isAvailable", true)
-                .andEqualTo("loginName", loginName);
+                .andEqualTo("phone", phone);
         return buyerMapper.selectOneByExample(example);
     }
 
     @Override
     public BuyerResp buyerLogin(BuyerReq buyerReq) {
-        Buyer buyer = this.findByLoginName(buyerReq.getLoginName());
+        Buyer buyer = this.findByPhone(buyerReq.getPhone());
         String md5Password = MD5Util.stringMD5(buyerReq.getPassword());
         if (!Objects.equals(buyer.getPassword(), md5Password)) {
             return null;
@@ -60,7 +62,7 @@ public class BuyerServiceImpl implements BuyerService {
         assert buyerResp != null;
         buyerResp.setToken(token);
         // 存入redis
-        redisService.set("buyer:".concat(buyer.getId().toString()), buyer, Long.valueOf(tokenTimeOut));
+        redisService.set(tokenBuyerPrefix.concat(buyer.getId().toString()), buyerResp, Long.valueOf(tokenTimeOut));
         return buyerResp;
     }
 }

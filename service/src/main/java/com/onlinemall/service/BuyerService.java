@@ -16,10 +16,10 @@ public interface BuyerService {
     /**
      * 根据登录名查询用户
      *
-     * @param loginName
+     * @param phone
      * @return
      */
-    Buyer findByLoginName(String loginName);
+    Buyer findByPhone(String phone);
 
     /**
      * 用户登录

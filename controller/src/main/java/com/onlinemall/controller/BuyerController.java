@@ -2,10 +2,13 @@ package com.onlinemall.controller;
 
 import com.onlinemall.common.Msg;
 import com.onlinemall.common.Result;
+import com.onlinemall.mybatis_entity.Buyer;
 import com.onlinemall.mybatis_entity.User;
+import com.onlinemall.req.BuyerReq;
 import com.onlinemall.req.UserReq;
+import com.onlinemall.resp.BuyerResp;
 import com.onlinemall.resp.UserResp;
-import com.onlinemall.service.UserService;
+import com.onlinemall.service.BuyerService;
 import com.onlinemall.tkmybatis.Insert;
 import com.onlinemall.tkmybatis.Update;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +24,21 @@ import java.util.Objects;
  * @author 11923
  */
 @RestController
-@RequestMapping("/back/user")
-public class UserController {
+@RequestMapping("/front/buyer")
+public class BuyerController {
     @Autowired
-    private UserService userService;
-
+    private BuyerService buyerService;
 
     /**
      * 员工注册
      */
     @PostMapping(value = "/register")
-    public Result userRegister(@RequestBody @Validated(Insert.class) UserReq userReq) {
-        User user = userService.findByLoginName(userReq.getLoginName());
-        if (Objects.nonNull(user)) {
-            return Result.build(Msg.FAIL, Msg.TEXT_LOGIN_NAME_EXIST);
+    public Result buyerRegister(@RequestBody @Validated(Insert.class) BuyerReq buyerReq) {
+        Buyer buyer = buyerService.findByPhone(buyerReq.getPhone());
+        if (Objects.nonNull(buyer)) {
+            return Result.build(Msg.FAIL, Msg.TEXT_PHONE_EXIST);
         }
-        Integer integer = userService.userRegister(userReq);
+        Integer integer = buyerService.buyerRegister(buyerReq);
         if (integer > 0) {
             return Result.build(Msg.OK, Msg.TEXT_REGISTER_OK);
         }
@@ -44,18 +46,18 @@ public class UserController {
     }
 
     /**
-     * 员工登录
+     * 用户登录
      */
     @PostMapping("/login")
-    public Result login(@RequestBody @Validated(Update.class) UserReq userReq) {
-        User user = userService.findByLoginName(userReq.getLoginName());
-        if (Objects.isNull(user)) {
+    public Result login(@RequestBody @Validated(Update.class) BuyerReq buyerReq) {
+        Buyer buyer = buyerService.findByPhone(buyerReq.getPhone());
+        if (Objects.isNull(buyer)) {
             return Result.buildFail(Msg.TEXT_USER_DATA_FAIL);
         }
-        UserResp userResp = userService.userLogin(userReq);
-        if (Objects.isNull(userResp)) {
+        BuyerResp buyerResp = buyerService.buyerLogin(buyerReq);
+        if (Objects.isNull(buyerResp)) {
             return Result.buildFail(Msg.TEXT_USER_DATA_FAIL);
         }
-        return Result.build(Msg.OK, Msg.TEXT_LOGIN_OK, userResp);
+        return Result.build(Msg.OK, Msg.TEXT_LOGIN_OK, buyerResp);
     }
 }

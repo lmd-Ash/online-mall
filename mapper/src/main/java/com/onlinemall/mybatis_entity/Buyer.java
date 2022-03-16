@@ -27,11 +27,13 @@ public class Buyer extends BaseEntity {
     /**
      * 手机号
      */
+    @Column(name = "phone")
     private String phone;
 
     /**
      * 登录密码
      */
+    @Column(name = "password")
     private String password;
 
     /**

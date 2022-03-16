@@ -43,20 +43,20 @@
 <div class="container">
 
     <div class="form-signin">
-        <h2 class="form-signin-heading">欢迎来到网上商城后台管理系统</h2>
-        <label for="loginName" class="sr-only">用户名</label>
-        <input type="text" id="loginName" class="form-control" placeholder="请输入用户名" required autofocus>
+        <h2 class="form-signin-heading">欢迎来到网上商城</h2>
+        <label for="phone" class="sr-only">手机号</label>
+        <input type="text" id="phone" class="form-control" placeholder="请输入手机号" required autofocus>
         <label for="password" class="sr-only">请输入密码</label>
         <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="backLogin()">确认登录</button>
         <div style="float: left">
             <label>
-                <a href="/login/changePassword.html">忘记密码</a>
+                <a href="/login/buyerChangePassword.html">忘记密码</a>
             </label>
         </div>
         <div style="float: right">
             <label>
-                <a href="/login/register.html">注册</a>
+                <a href="/login/buyerRegister.html">注册</a>
             </label>
         </div>
     </div>
@@ -70,12 +70,12 @@
 <script>
     function backLogin() {
         let data = {
-            loginName: $("#loginName").val(),
+            phone: $("#phone").val(),
             password: $("#password").val()
         };
         data = JSON.stringify(data);
         $.ajax({
-            url: '/back/user/login',
+            url: '/front/buyer/login',
             type: 'post',
             dataType: 'json',
             contentType: 'application/json',
@@ -92,7 +92,7 @@
                     // 存入token
                     setToken(newData.data.token);
                     // 跳转商品管理
-                    window.location.href = "../product/backProduct.html";
+                    window.location.href = "../product/frontProduct.html";
                 } else {
                     alert("消息:" + newData.msg);
                 }
