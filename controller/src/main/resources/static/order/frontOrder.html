@@ -75,9 +75,9 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active" id="product"><a href="../product/backProduct.html">全部商品 <span
+                <li><a href="../product/frontProduct.html">全部商品</a></li>
+                <li class="active" id="product"><a href="../order/frontOrder.html">我的订单 <span
                         class="sr-only">(current)</span></a></li>
-                <li><a href="../order/frontOrder.html">我的订单</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -93,6 +93,7 @@
                         <th>商品图片</th>
                         <th>商品价格（元）</th>
                         <th>商品单位</th>
+                        <th>商品库存</th>
                     </tr>
                     </thead>
                     <tbody id="tbody">
@@ -145,12 +146,13 @@
                 for (let i = 0; i < productsData.length; i++) {
                     console.log(productsData[i]);
                     let tr = $("<tr />");
-                    let td = $("<td><a href='../order/frontOrder.add.html?id=" + productsData[i].id + "' class=\"glyphicon glyphicon-shopping-cart\" aria-hidden=\"true\"></a></td>" +
+                    let td = $("<td><a class=\"glyphicon glyphicon-shopping-cart\" aria-hidden=\"true\"></a></td>" +
                         "<td>" + productsData[i].productTypeName + "</td>" +
                         "<td>" + productsData[i].productName + "</td>" +
                         "<td><img src=" + productsData[i].imgUrlList[0] + " width=\"50px\" height=\"30px\" /></td>" +
                         "<td>" + productsData[i].sellingPrice + "</td>" +
-                        "<td>" + productsData[i].specs + "</td>");
+                        "<td>" + productsData[i].specs + "</td>" +
+                        "<td>" + productsData[i].skuNum + "</td>");
                     tr.append(td)
                     $("#tbody").append(tr);
                 }

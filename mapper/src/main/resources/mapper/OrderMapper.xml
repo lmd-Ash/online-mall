@@ -22,4 +22,9 @@
     <result column="is_evaluate" jdbcType="BIT" property="isEvaluate" />
     <result column="is_available" jdbcType="BIT" property="isAvailable" />
   </resultMap>
+
+  <insert id="saveOrder" keyProperty="id" parameterType="com.onlinemall.mybatis_entity.Order" useGeneratedKeys="true">
+    insert into `order` (order_no, buyer_id, total_price, detail_address, receiver_name, receiver_phone, order_status, note)
+    values (#{orderNo}, #{buyerId}, #{totalPrice}, #{detailAddress}, #{receiverName}, #{receiverPhone}, #{orderStatus}, #{note})
+  </insert>
 </mapper>

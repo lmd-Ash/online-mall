@@ -75,30 +75,37 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active" id="product"><a href="../product/backProduct.html">全部商品 <span
+                <li><a href="../product/frontProduct.html">全部商品</a></li>
+                <li class="active" id="product"><a href="../order/frontOrder.html">我的订单 <span
                         class="sr-only">(current)</span></a></li>
-                <li><a href="../order/frontOrder.html">我的订单</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-            <div class="table-responsive">
+            <div class="table-responsive" style="width: 500px">
 
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>操作</th>
-                        <th>商品分类</th>
-                        <th>商品名称</th>
-                        <th>商品图片</th>
-                        <th>商品价格（元）</th>
-                        <th>商品单位</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
+                <el-form :model="orderForm" label-width="150px" class="demo-ruleForm">
+                    <el-form-item label="收货人" prop="receiverName">
+                        <el-input v-model="orderForm.receiverName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="收货人联系方式" prop="receiverPhone">
+                        <el-input v-model="orderForm.receiverPhone"></el-input>
+                    </el-form-item>
+                    <el-form-item label="收货地址" prop="detailAddress">
+                        <el-input v-model="orderForm.detailAddress"></el-input>
+                    </el-form-item>
+                    <el-form-item label="备注" prop="note">
+                        <el-input v-model="orderForm.note"></el-input>
+                    </el-form-item>
+                    <el-form-item label="购买数量" prop="productNum">
+                        <el-input v-model="orderForm.productNum"></el-input>
+                    </el-form-item>
 
-                    </tbody>
-                </table>
+                    <el-button @click="cancel()">取 消</el-button>
+                    <el-button type="primary" @click="submitForm()">确 定</el-button>
+
+                </el-form>
+
             </div>
         </div>
     </div>
@@ -123,42 +130,56 @@
         // 获取token
         let token = getToken();
         console.log(token);
-        getProducts();
-
-
     });
 
-    let productsData = [];
+    var vm = new Vue({
+        commonConfig: {
+            headers: {Authorization: getToken()}
+        },
+        el: "#app",
+        data: {
+            // 表单数据
+            orderForm: {},
+            dialogImageUrl: '',
+            formLabelWidth: '80px',
+            productId: window.location.href.split("=")[1]
+        },
+        mounted: function () {
+            // 调用函数初始化
+            this.fileList = [];
+        },
+        methods: {
+            submitForm: function () {
+                this.$set(this.orderForm, "productId", this.productId);
+                console.log(this.orderForm);
+                axios.post("/front/order/createOrder", this.orderForm, {
+                    headers: {
+                        'Authorization': getToken(),
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    this.dialogVisible = false;
+                    if (response.data.code === 200) {
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        })
+                        window.location.href = "../product/frontProduct.html";
+                    } else {
+                        this.$message({
+                            message: response.data.msg,
+                            type: 'error'
+                        })
+                    }
+                })
 
-    function getProducts() {
-        $.ajax({
-            url: '/front/product/list',
-            type: 'get',
-            dataType: 'json',
-            contentType: 'application/json',
-            headers: {
-                "Authorization": getToken()
             },
-            success: function (result) {
-                console.log(result);
-                productsData = result.data;
-                for (let i = 0; i < productsData.length; i++) {
-                    console.log(productsData[i]);
-                    let tr = $("<tr />");
-                    let td = $("<td><a href='../order/frontOrder.add.html?id=" + productsData[i].id + "' class=\"glyphicon glyphicon-shopping-cart\" aria-hidden=\"true\"></a></td>" +
-                        "<td>" + productsData[i].productTypeName + "</td>" +
-                        "<td>" + productsData[i].productName + "</td>" +
-                        "<td><img src=" + productsData[i].imgUrlList[0] + " width=\"50px\" height=\"30px\" /></td>" +
-                        "<td>" + productsData[i].sellingPrice + "</td>" +
-                        "<td>" + productsData[i].specs + "</td>");
-                    tr.append(td)
-                    $("#tbody").append(tr);
-                }
+            cancel: function () {
+                window.location.href = "../product/frontProduct.html";
             }
-        });
-    }
 
-
+        }
+    })
 </script>
 </body>
 </html>

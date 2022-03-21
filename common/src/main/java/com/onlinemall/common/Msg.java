@@ -53,13 +53,9 @@ public interface Msg {
     String TEXT_DATA_REPEAT_FAIL = "数据重复";
     String TEXT_USER_DATA_FAIL = "用户不存在,请先注册";
 
-    Integer BLOG_FAIL = 350;
-    String TEXT_BLOG_FAIL = "博客不存在";
-    String TEXT_BLOG_DELETE_FAIL = "删除博客失败，请刷新页面";
-    String TEXT_BLOG_TITLE_FAIL = "博客标题不能为空";
-    String TEXT_BLOG_TYPE_FAIL = "请选择博客分类";
-    String TEXT_BLOG_KEYWORD_FAIL = "博客关键词不能为空";
-    String TEXT_BLOG_ABSTRACT_FAIL = "请填写博客摘要";
+    Integer ORDER_FAIL = 350;
+    String TEXT_ORDER_SAVE_FAIL = "下单失败";
+    String TEXT_ORDER_FAIL = "订单不存在";
 
     Integer COMMENT_FAIL = 360;
     String TEXT_COMMENT_TYPE_FAIL = "评论类型未传";

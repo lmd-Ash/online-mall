@@ -1,5 +1,7 @@
 package com.onlinemall.mybatis_entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.onlinemall.tkmybatis.BaseEntity;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -47,12 +49,14 @@ public class OrderDetail extends BaseEntity {
     /**
      * 创建时间
      */
+    @TableField(insertStrategy = FieldStrategy.NEVER)
     @Column(name = "create_time")
     private Date createTime;
 
     /**
      * 是否可用，1：可用，0：不可用
      */
+    @TableField(insertStrategy = FieldStrategy.NEVER)
     @Column(name = "is_available")
     private Boolean isAvailable;
 
