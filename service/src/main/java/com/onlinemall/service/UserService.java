@@ -4,6 +4,8 @@ import com.onlinemall.mybatis_entity.User;
 import com.onlinemall.req.UserReq;
 import com.onlinemall.resp.UserResp;
 
+import java.util.List;
+
 /**
  * @author 11923
  */
@@ -39,4 +41,12 @@ public interface UserService {
      * @return
      */
     User findById(Integer id);
+
+    /**
+     * 查询用户
+     *
+     * @param userReq
+     * @return
+     */
+    List<UserResp> findAll(UserReq userReq);
 }

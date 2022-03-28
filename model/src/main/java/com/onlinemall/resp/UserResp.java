@@ -47,7 +47,7 @@ public class UserResp implements Serializable {
     /**
      * 是否可用：0：否，1：是
      */
-    private Boolean isUsable;
+    private Boolean isAvailable;
 
     private String token;
 

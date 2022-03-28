@@ -10,11 +10,9 @@ import com.onlinemall.tkmybatis.Insert;
 import com.onlinemall.tkmybatis.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -57,5 +55,11 @@ public class UserController {
             return Result.buildFail(Msg.TEXT_USER_DATA_FAIL);
         }
         return Result.build(Msg.OK, Msg.TEXT_LOGIN_OK, userResp);
+    }
+
+    @GetMapping("/list")
+    public Result list(UserReq userReq) {
+        List<UserResp> userResps = userService.findAll(userReq);
+        return Result.buildQueryOk(userResps);
     }
 }

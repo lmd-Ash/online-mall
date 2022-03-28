@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -71,5 +72,13 @@ public class UserServiceImpl implements UserService {
         example.createCriteria().andEqualTo("isAvailable", true)
                 .andEqualTo("id", id);
         return userMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<UserResp> findAll(UserReq userReq) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("isAvailable", true);
+        List<User> users = userMapper.selectByExample(example);
+        return BeanMapper.mapList(users, UserResp.class);
     }
 }

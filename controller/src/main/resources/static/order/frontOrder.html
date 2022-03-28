@@ -87,13 +87,13 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>操作</th>
-                        <th>商品分类</th>
-                        <th>商品名称</th>
-                        <th>商品图片</th>
-                        <th>商品价格（元）</th>
-                        <th>商品单位</th>
-                        <th>商品库存</th>
+                        <th>订单编号</th>
+                        <th>总价（元）</th>
+                        <th>收货地址</th>
+                        <th>收货人</th>
+                        <th>联系方式</th>
+                        <th>创建时间</th>
+                        <th>备注</th>
                     </tr>
                     </thead>
                     <tbody id="tbody">
@@ -129,11 +129,11 @@
 
     });
 
-    let productsData = [];
+    let ordersData = [];
 
     function getProducts() {
         $.ajax({
-            url: '/front/product/list',
+            url: '/front/order/findAll',
             type: 'get',
             dataType: 'json',
             contentType: 'application/json',
@@ -142,18 +142,24 @@
             },
             success: function (result) {
                 console.log(result);
-                productsData = result.data;
-                for (let i = 0; i < productsData.length; i++) {
-                    console.log(productsData[i]);
+                ordersData = result.data;
+                for (let i = 0; i < ordersData.length; i++) {
+                    console.log(ordersData[i]);
                     let tr = $("<tr />");
-                    let td = $("<td><a class=\"glyphicon glyphicon-shopping-cart\" aria-hidden=\"true\"></a></td>" +
-                        "<td>" + productsData[i].productTypeName + "</td>" +
-                        "<td>" + productsData[i].productName + "</td>" +
-                        "<td><img src=" + productsData[i].imgUrlList[0] + " width=\"50px\" height=\"30px\" /></td>" +
-                        "<td>" + productsData[i].sellingPrice + "</td>" +
-                        "<td>" + productsData[i].specs + "</td>" +
-                        "<td>" + productsData[i].skuNum + "</td>");
-                    tr.append(td)
+                    let td = $("<td>" + ordersData[i].orderNo + "</td>" +
+                        "<td>" + ordersData[i].totalPrice + "</td>" +
+                        "<td>" + ordersData[i].detailAddress + "</td>" +
+                        "<td>" + ordersData[i].receiverName + "</td>" +
+                        "<td>" + ordersData[i].receiverPhone + "</td>" +
+                        "<td>" + ordersData[i].createTime + "</td>");
+                    let td2;
+                    if (ordersData[i].note != null) {
+                        td2 = $("<td>" + ordersData[i].note + "</td>");
+                    } else {
+                        td2 = $("<td></td>");
+                    }
+                    tr.append(td);
+                    tr.append(td2);
                     $("#tbody").append(tr);
                 }
             }

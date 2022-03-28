@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
+@Table(name = "torder")
 public class Order extends BaseEntity {
     /**
      * 订单id
