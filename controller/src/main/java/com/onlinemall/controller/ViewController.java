@@ -9,7 +9,7 @@ public class ViewController {
     /**
      * 跳转后管登录页面
      */
-    @RequestMapping("/login")
+    @RequestMapping("/back/login")
     public String loginIndex() {
         return "login/login";
     }
@@ -17,7 +17,7 @@ public class ViewController {
     /**
      * 跳转后管登录页面
      */
-    @RequestMapping("/buyer/login")
+    @RequestMapping("/login")
     public String login() {
         return "login/buyerLogin";
     }
