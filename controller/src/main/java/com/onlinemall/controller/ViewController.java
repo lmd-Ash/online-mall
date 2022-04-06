@@ -36,6 +36,6 @@ public class ViewController {
      */
     @RequestMapping("/product")
     public String backProduct() {
-        return "product/backProduct";
+        return "product/frontProduct";
     }
 }
